@@ -8,8 +8,8 @@
 {
   'variables': {
     'icu_src_derb': [
-      '<(icu_path)/source/tools/genrb/derb.c',
-      '<(icu_path)/source/tools/genrb/derb.cpp'
+      '../../deps/icu-small/source/tools/genrb/derb.c',
+      '../../deps/icu-small/source/tools/genrb/derb.cpp'
     ],
   },
   'includes': [ '../../icu_config.gypi' ],
@@ -253,7 +253,7 @@
                   'outputs': [ '<(SHARED_INTERMEDIATE_DIR)/icutmp/icudt<(icu_ver_major)<(icu_endianness).dat' ],
                   'action': [ 'python',
                               'icutrim.py',
-                              '-P', '<(PRODUCT_DIR)/.', # '.' suffix is a workaround against GYP assumptions :(
+                              '-P', '<(PRODUCT_DIR)\\.', # '.' suffix is a workaround against GYP assumptions :(
                               '-D', '<(icu_data_in)',
                               '--delete-tmp',
                               '-T', '<(SHARED_INTERMEDIATE_DIR)/icutmp',
@@ -266,18 +266,18 @@
                   # build final .dat -> .obj
                   'action_name': 'genccode',
                   'msvs_quote_cmd': 0,
-                  'inputs': [ '<(SHARED_INTERMEDIATE_DIR)/icutmp/icudt<(icu_ver_major)<(icu_endianness).dat' ],
-                  'outputs': [ '<(SHARED_INTERMEDIATE_DIR)/icudt<(icu_ver_major)<(icu_endianness)_dat.obj' ],
+                  'inputs': [ '<(SHARED_INTERMEDIATE_DIR)\\icutmp\\icudt<(icu_ver_major)<(icu_endianness).dat' ],
+                  'outputs': [ '<(SHARED_INTERMEDIATE_DIR)\\icudt<(icu_ver_major)<(icu_endianness)_dat.obj' ],
                   'action': [ '<(PRODUCT_DIR)/genccode',
                               '-o',
-                              '-d', '<(SHARED_INTERMEDIATE_DIR)/',
+                              '-d', '<(SHARED_INTERMEDIATE_DIR)\\',
                               '-n', 'icudata',
                               '-e', 'icusmdt<(icu_ver_major)',
                               '<@(_inputs)' ],
                 },
               ],
               # This file contains the small ICU data.
-              'sources': [ '<(SHARED_INTERMEDIATE_DIR)/icudt<(icu_ver_major)<(icu_endianness)_dat.obj' ],
+              'sources': [ '<(SHARED_INTERMEDIATE_DIR)\\icudt<(icu_ver_major)<(icu_endianness)_dat.obj' ],
             } ] ], #end of OS==win and icu_small == true
         }, { # OS != win
           'conditions': [
