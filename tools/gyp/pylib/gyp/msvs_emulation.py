@@ -315,6 +315,7 @@ class MsvsSettings(object):
 
   def _TargetConfig(self, config):
     """Returns the target-specific configuration."""
+    return config
     # There's two levels of architecture/platform specification in VS. The
     # first level is globally for the configuration (this is what we consider
     # "the" config at the gyp level, which will be something like 'Debug' or
