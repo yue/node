@@ -200,6 +200,10 @@ NODE_EXTERN extern bool force_fips_crypto;
 # endif
 #endif
 
+class Environment;
+typedef bool (*RunLoopFunc)(Environment* env);
+NODE_EXTERN void SetRunLoop(RunLoopFunc init, RunLoopFunc run);
+
 NODE_EXTERN int Start(int argc, char *argv[]);
 NODE_EXTERN void Init(int* argc,
                       const char** argv,
