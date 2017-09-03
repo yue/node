@@ -230,6 +230,9 @@ class Environment;
 class MultiIsolatePlatform;
 class InitializationResultImpl;
 
+typedef bool (*RunLoopFunc)(Environment* env);
+NODE_EXTERN void SetRunLoop(RunLoopFunc init, RunLoopFunc run);
+
 namespace ProcessInitializationFlags {
 enum Flags : uint32_t {
   kNoFlags = 0,

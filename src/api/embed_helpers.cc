@@ -19,6 +19,14 @@ using v8::TryCatch;
 
 namespace node {
 
+RunLoopFunc init_loop = nullptr;
+RunLoopFunc run_loop = nullptr;
+
+void SetRunLoop(RunLoopFunc init, RunLoopFunc run) {
+  init_loop = init;
+  run_loop = run;
+}
+
 Maybe<ExitCode> SpinEventLoopInternal(Environment* env) {
   CHECK_NOT_NULL(env);
   MultiIsolatePlatform* platform = GetMultiIsolatePlatform(env);
@@ -38,7 +46,10 @@ Maybe<ExitCode> SpinEventLoopInternal(Environment* env) {
         node::performance::NODE_PERFORMANCE_MILESTONE_LOOP_START);
     do {
       if (env->is_stopping()) break;
-      uv_run(env->event_loop(), UV_RUN_DEFAULT);
+      if (env->event_loop() == uv_default_loop() && run_loop)
+        run_loop(env);
+      else
+        uv_run(env->event_loop(), UV_RUN_DEFAULT);
       if (env->is_stopping()) break;
 
       platform->DrainTasks(isolate);

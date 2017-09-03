@@ -44,6 +44,8 @@ using v8::SealHandleScope;
 using v8::String;
 using v8::Value;
 
+extern RunLoopFunc init_loop;
+
 bool AllowWasmCodeGenerationCallback(Local<Context> context,
                                      Local<String>) {
   Local<Value> wasm_code_gen =
@@ -480,6 +482,9 @@ Environment* CreateEnvironment(
     }
   }
 #endif
+
+  if (init_loop)
+    init_loop(env);
 
   if (!use_snapshot && env->principal_realm()->RunBootstrapping().IsEmpty()) {
     FreeEnvironment(env);
