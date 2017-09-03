@@ -212,6 +212,10 @@ namespace node {
 class IsolateData;
 class Environment;
 
+class Environment;
+typedef bool (*RunLoopFunc)(Environment* env);
+NODE_EXTERN void SetRunLoop(RunLoopFunc init, RunLoopFunc run);
+
 // TODO(addaleax): Officially deprecate this and replace it with something
 // better suited for a public embedder API.
 NODE_EXTERN int Start(int argc, char* argv[]);
