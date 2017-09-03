@@ -227,6 +227,9 @@ class Environment;
 class MultiIsolatePlatform;
 class InitializationResultImpl;
 
+typedef bool (*RunLoopFunc)(Environment* env);
+NODE_EXTERN void SetRunLoop(RunLoopFunc init, RunLoopFunc run);
+
 namespace ProcessFlags {
 // TODO(addaleax): Switch to uint32_t to match std::atomic<uint32_t>
 // init_process_flags in node.cc

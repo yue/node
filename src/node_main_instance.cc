@@ -29,6 +29,8 @@ using v8::Isolate;
 using v8::Local;
 using v8::Locker;
 
+extern RunLoopFunc init_loop;
+
 NodeMainInstance::NodeMainInstance(Isolate* isolate,
                                    uv_loop_t* event_loop,
                                    MultiIsolatePlatform* platform,
@@ -176,6 +178,8 @@ NodeMainInstance::CreateMainEnvironment(int* exit_code) {
 #if HAVE_OPENSSL
     crypto::InitCryptoOnce(isolate_);
 #endif  // HAVE_OPENSSL
+    if (init_loop)
+      init_loop(env.get());
   } else {
     context = NewContext(isolate_);
     CHECK(!context.IsEmpty());
@@ -190,6 +194,8 @@ NodeMainInstance::CreateMainEnvironment(int* exit_code) {
 #if HAVE_INSPECTOR
     env->InitializeInspector({});
 #endif
+    if (init_loop)
+      init_loop(env.get());
     if (env->principal_realm()->RunBootstrapping().IsEmpty()) {
       return nullptr;
     }
