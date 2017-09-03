@@ -15,6 +15,14 @@
 
 namespace node {
 
+RunLoopFunc init_loop = nullptr;
+RunLoopFunc run_loop = nullptr;
+
+void SetRunLoop(RunLoopFunc init, RunLoopFunc run) {
+  init_loop = init;
+  run_loop = run;
+}
+
 using v8::Context;
 using v8::HandleScope;
 using v8::Isolate;
@@ -127,7 +135,10 @@ int NodeMainInstance::Run() {
       env->performance_state()->Mark(
           node::performance::NODE_PERFORMANCE_MILESTONE_LOOP_START);
       do {
-        uv_run(env->event_loop(), UV_RUN_DEFAULT);
+        if (run_loop)
+          run_loop(env.get());
+        else
+          uv_run(env->event_loop(), UV_RUN_DEFAULT);
 
         per_process::v8_platform.DrainVMTasks(isolate_);
 

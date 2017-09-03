@@ -30,6 +30,8 @@ using v8::PropertyDescriptor;
 using v8::String;
 using v8::Value;
 
+extern RunLoopFunc init_loop;
+
 bool AllowWasmCodeGenerationCallback(Local<Context> context,
                                      Local<String>) {
   Local<Value> wasm_code_gen =
@@ -366,6 +368,9 @@ Environment* CreateEnvironment(
     env->InitializeInspector({});
   }
 #endif
+
+  if (init_loop)
+    init_loop(env);
 
   if (env->RunBootstrapping().IsEmpty()) {
     FreeEnvironment(env);
