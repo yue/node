@@ -214,6 +214,9 @@ namespace node {
 class IsolateData;
 class Environment;
 
+typedef bool (*RunLoopFunc)(Environment* env);
+NODE_EXTERN void SetRunLoop(RunLoopFunc init, RunLoopFunc run);
+
 namespace ProcessFlags {
 enum Flags : uint64_t {
   kNoFlags = 0,
