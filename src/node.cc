@@ -180,6 +180,8 @@ static node_module* modlist_builtin;
 static node_module* modlist_internal;
 static node_module* modlist_linked;
 static node_module* modlist_addon;
+static RunLoopFunc init_loop = nullptr;
+static RunLoopFunc run_loop = nullptr;
 
 // Bit flag used to track security reverts (see node_revert.h)
 unsigned int reverted = 0;
@@ -2137,6 +2139,9 @@ void LoadEnvironment(Environment* env) {
   // (Allows you to set stuff on `global` from anywhere in JavaScript.)
   global->Set(FIXED_ONE_BYTE_STRING(env->isolate(), "global"), global);
 
+  if (init_loop)
+    init_loop(env);
+
   // Create binding loaders
   Local<Function> get_binding_fn =
       env->NewFunctionTemplate(GetBinding)->GetFunction(env->context())
@@ -2813,6 +2818,11 @@ void FreePlatform(MultiIsolatePlatform* platform) {
   delete platform;
 }
 
+void SetRunLoop(RunLoopFunc init, RunLoopFunc run) {
+  init_loop = init;
+  run_loop = run;
+}
+
 
 Local<Context> NewContext(Isolate* isolate,
                           Local<ObjectTemplate> object_template) {
@@ -2868,7 +2878,10 @@ inline int Start(Isolate* isolate, IsolateData* isolate_data,
     env.performance_state()->Mark(
         node::performance::NODE_PERFORMANCE_MILESTONE_LOOP_START);
     do {
-      uv_run(env.event_loop(), UV_RUN_DEFAULT);
+      if (run_loop)
+        run_loop(&env);
+      else
+        uv_run(env.event_loop(), UV_RUN_DEFAULT);
 
       v8_platform.DrainVMTasks(isolate);
 
