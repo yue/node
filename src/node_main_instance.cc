@@ -24,6 +24,8 @@ using v8::Local;
 using v8::Locker;
 using v8::Object;
 
+extern RunLoopFunc init_loop;
+
 std::unique_ptr<ExternalReferenceRegistry> NodeMainInstance::registry_ =
     nullptr;
 NodeMainInstance::NodeMainInstance(Isolate* isolate,
@@ -231,6 +233,9 @@ NodeMainInstance::CreateMainEnvironment(int* exit_code,
 #if HAVE_INSPECTOR
   env->InitializeInspector({});
 #endif
+
+  if (init_loop)
+    init_loop(env.get());
 
   if (!deserialize_mode_ && env->RunBootstrapping().IsEmpty()) {
     return nullptr;
