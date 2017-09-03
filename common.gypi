@@ -212,19 +212,9 @@
         'conditions': [
           ['target_arch=="ia32"', {
             'TargetMachine' : 1, # /MACHINE:X86
-            'target_conditions': [
-              ['_type=="executable"', {
-                'AdditionalOptions': [ '/SubSystem:Console,"5.01"' ],
-              }],
-            ],
           }],
           ['target_arch=="x64"', {
             'TargetMachine' : 17, # /MACHINE:AMD64
-            'target_conditions': [
-              ['_type=="executable"', {
-                'AdditionalOptions': [ '/SubSystem:Console,"5.02"' ],
-              }],
-            ],
           }],
         ],
         'GenerateDebugInformation': 'true',
