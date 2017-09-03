@@ -192,6 +192,8 @@ static std::string trace_enabled_categories;  // NOLINT(runtime/string)
 static std::string trace_file_pattern =  // NOLINT(runtime/string)
   "node_trace.${rotation}.log";
 static bool abort_on_uncaught_exception = false;
+static RunLoopFunc init_loop = nullptr;
+static RunLoopFunc run_loop = nullptr;
 
 // Bit flag used to track security reverts (see node_revert.h)
 unsigned int reverted = 0;
@@ -3072,6 +3074,9 @@ void LoadEnvironment(Environment* env) {
   // (Allows you to set stuff on `global` from anywhere in JavaScript.)
   global->Set(FIXED_ONE_BYTE_STRING(env->isolate(), "global"), global);
 
+  if (init_loop)
+    init_loop(env);
+
   // Now we call 'f' with the 'process' variable that we've built up with
   // all our bindings. Inside bootstrap_node.js and internal/process we'll
   // take care of assigning things to their places.
@@ -4077,6 +4082,11 @@ void FreePlatform(MultiIsolatePlatform* platform) {
   delete platform;
 }
 
+void SetRunLoop(RunLoopFunc init, RunLoopFunc run) {
+  init_loop = init;
+  run_loop = run;
+}
+
 
 inline int Start(Isolate* isolate, IsolateData* isolate_data,
                  int argc, const char* const* argv,
@@ -4115,7 +4125,10 @@ inline int Start(Isolate* isolate, IsolateData* isolate_data,
     bool more;
     PERFORMANCE_MARK(&env, LOOP_START);
     do {
-      uv_run(env.event_loop(), UV_RUN_DEFAULT);
+      if (run_loop)
+        run_loop(&env);
+      else
+        uv_run(env.event_loop(), UV_RUN_DEFAULT);
 
       v8_platform.DrainVMTasks(isolate);
 
