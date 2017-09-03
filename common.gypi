@@ -333,11 +333,6 @@
         'WarningLevel': 3,                    # /W3
       },
       'VCLinkerTool': {
-        'target_conditions': [
-          ['_type=="executable"', {
-            'SubSystem': 1,                   # /SUBSYSTEM:CONSOLE
-          }],
-        ],
         'conditions': [
           ['target_arch=="ia32"', {
             'TargetMachine' : 1,              # /MACHINE:X86
