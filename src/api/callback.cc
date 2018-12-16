@@ -128,12 +128,14 @@ void InternalCallbackScope::Close() {
     perform_stopping_check();
   }
 
+#if 0
   // Make sure the stack unwound properly. If there are nested MakeCallback's
   // then it should return early and not reach this code.
   if (env_->async_hooks()->fields()[AsyncHooks::kTotals]) {
     CHECK_EQ(env_->execution_async_id(), 0);
     CHECK_EQ(env_->trigger_async_id(), 0);
   }
+#endif
 
   if (!tick_info->has_tick_scheduled() && !tick_info->has_rejection_to_warn()) {
     return;
