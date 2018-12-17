@@ -271,7 +271,7 @@
     'msvs_settings': {
       'VCCLCompilerTool': {
         'StringPooling': 'true', # pool string literals
-        'DebugInformationFormat': 1, # /Z7 embed info in .obj files
+        'DebugInformationFormat': 0, # /Z7 embed info in .obj files
         'WarningLevel': 3,
         'BufferSecurityCheck': 'true',
         'ExceptionHandling': 0, # /EHsc
@@ -287,8 +287,8 @@
             'TargetMachine' : 17, # /MACHINE:AMD64
           }],
         ],
-        'GenerateDebugInformation': 'true',
-        'GenerateMapFile': 'true', # /MAP
+        'GenerateDebugInformation': 'false',
+        'GenerateMapFile': 'false', # /MAP
         'MapExports': 'true', # /MAPINFO:EXPORTS
         'RandomizedBaseAddress': 2, # enable ASLR
         'DataExecutionPrevention': 2, # enable DEP
