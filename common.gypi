@@ -243,7 +243,7 @@
                 'WholeProgramOptimization': 'false'
               },
               'VCLinkerTool': {
-                'LinkIncremental': 2 # enable incremental linking
+                'LinkIncremental': 1 # disable incremental linking
               }
             }
           }]
