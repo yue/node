@@ -1221,7 +1221,7 @@ class NinjaWriter:
                 command = "cc_s"
             elif (
                 self.flavor == "win"
-                and ext == "asm"
+                and (ext == "asm" or ext == 'S')
                 and not self.msvs_settings.HasExplicitAsmRules(spec)
             ):
                 command = "asm"
