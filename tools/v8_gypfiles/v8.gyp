@@ -838,7 +838,17 @@
             '<!@pymod_do_main(GN-scraper "<(V8_ROOT)/BUILD.gn"  "\\"v8_base_without_compiler.*?v8_current_cpu == \\"arm64\\".*?sources \\+= ")',
           ],
           'conditions': [
-            ['OS=="mac"', {
+            ['OS=="mac" and v8_target_arch!=host_arch', {
+              'target_conditions': [
+                ['_toolset == "target"', {
+                  'sources': [
+                    "<(V8_ROOT)/src/trap-handler/handler-inside-posix.cc",
+                    "<(V8_ROOT)/src/trap-handler/handler-outside-posix.cc",
+                  ],
+                }],
+              ],
+            }],
+            ['OS=="mac" and v8_target_arch==host_arch', {
               'sources': [
                 "<(V8_ROOT)/src/trap-handler/handler-inside-posix.cc",
                 "<(V8_ROOT)/src/trap-handler/handler-outside-posix.cc",
