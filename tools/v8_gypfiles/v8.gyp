@@ -327,14 +327,6 @@
              '<(V8_ROOT)/src/builtins/builtins-intl-gen.cc',
            ],
          }],
-        ['OS=="win"', {
-          'msvs_precompiled_header': '<(V8_ROOT)/../../tools/msvs/pch/v8_pch.h',
-          'msvs_precompiled_source': '<(V8_ROOT)/../../tools/msvs/pch/v8_pch.cc',
-          'sources': [
-            '<(_msvs_precompiled_header)',
-            '<(_msvs_precompiled_source)',
-          ],
-        }],
       ],
     },  # v8_initializers
     {
@@ -684,16 +676,6 @@
         'v8_shared_internal_headers',
       ],
       'sources': ['<@(v8_compiler_sources)'],
-      'conditions': [
-        ['OS=="win"', {
-          'msvs_precompiled_header': '<(V8_ROOT)/../../tools/msvs/pch/v8_pch.h',
-          'msvs_precompiled_source': '<(V8_ROOT)/../../tools/msvs/pch/v8_pch.cc',
-          'sources': [
-            '<(_msvs_precompiled_header)',
-            '<(_msvs_precompiled_source)',
-          ],
-        }],
-      ],
     },  # v8_compiler_opt
     {
       'target_name': 'v8_compiler',
@@ -709,16 +691,6 @@
         'v8_shared_internal_headers',
       ],
       'sources': ['<@(v8_compiler_sources)'],
-      'conditions': [
-        ['OS=="win"', {
-          'msvs_precompiled_header': '<(V8_ROOT)/../../tools/msvs/pch/v8_pch.h',
-          'msvs_precompiled_source': '<(V8_ROOT)/../../tools/msvs/pch/v8_pch.cc',
-          'sources': [
-            '<(_msvs_precompiled_header)',
-            '<(_msvs_precompiled_source)',
-          ],
-        }],
-      ],
     },  # v8_compiler
     {
       'target_name': 'v8_compiler_for_mksnapshot',
@@ -913,12 +885,6 @@
           ],
         }],        
         ['OS=="win"', {
-          'msvs_precompiled_header': '<(V8_ROOT)/../../tools/msvs/pch/v8_pch.h',
-          'msvs_precompiled_source': '<(V8_ROOT)/../../tools/msvs/pch/v8_pch.cc',
-          'sources': [
-            '<(_msvs_precompiled_header)',
-            '<(_msvs_precompiled_source)',
-          ],
           # This will prevent V8's .cc files conflicting with the inspector's
           # .cpp files in the same shard.
           'msvs_settings': {
