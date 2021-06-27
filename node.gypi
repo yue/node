@@ -70,7 +70,7 @@
         '_UNICODE=1',
       ],
       'conditions': [
-          ['clang != 1 or use_ccache_win != 1', {
+          ['False', {
             'msvs_precompiled_header': 'tools/msvs/pch/node_pch.h',
             'msvs_precompiled_source': 'tools/msvs/pch/node_pch.cc',
             'sources': [
