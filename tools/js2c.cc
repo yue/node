@@ -529,10 +529,11 @@ Fragment GetDefinition(const std::string& var, const std::vector<char>& code) {
   }
 }
 
-int AddModule(const std::string& filename,
+int AddModule(std::string filename,
               Fragments* definitions,
               Fragments* initializers,
               Fragments* registrations) {
+  std::replace(filename.begin(), filename.end(), '\\', '/');
   Debug("AddModule %s start\n", filename.c_str());
 
   int error = 0;
