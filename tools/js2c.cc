@@ -656,10 +656,11 @@ Fragment GetDefinition(const std::string& var, const std::vector<char>& code) {
   return GetDefinitionImpl<uint16_t>(code, var, CodeType::kTwoByte);
 }
 
-int AddModule(const std::string& filename,
+int AddModule(std::string filename,
               Fragments* definitions,
               Fragments* initializers,
               Fragments* registrations) {
+  std::replace(filename.begin(), filename.end(), '\\', '/');
   Debug("AddModule %s start\n", filename.c_str());
 
   int error = 0;
