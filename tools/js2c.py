@@ -196,7 +196,7 @@ def SourceFileByExt(files_by_ext, filename):
   :rtype: dict
   """
   ext = os.path.splitext(filename)[-1]
-  files_by_ext.setdefault(ext, []).append(filename)
+  files_by_ext.setdefault(ext, []).append(filename.replace('\\', '/'))
   return files_by_ext
 
 def main():
