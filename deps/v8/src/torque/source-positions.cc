@@ -40,12 +40,15 @@ std::string SourceFileMap::PathFromV8RootWithoutExtension(SourceId file) {
 
 // static
 SourceId SourceFileMap::AddSource(std::string path) {
+  std::replace(path.begin(), path.end(), '\\', '/');
   Get().sources_.push_back(std::move(path));
   return SourceId(static_cast<int>(Get().sources_.size()) - 1);
 }
 
 // static
-SourceId SourceFileMap::GetSourceId(const std::string& path) {
+SourceId SourceFileMap::GetSourceId(const std::string& raw_path) {
+  std::string path = raw_path;
+  std::replace(path.begin(), path.end(), '\\', '/');
   for (size_t i = 0; i < Get().sources_.size(); ++i) {
     if (Get().sources_[i] == path) {
       return SourceId(static_cast<int>(i));
