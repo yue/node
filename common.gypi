@@ -295,7 +295,7 @@
             'TargetMachine' : 0,              # NotSet. MACHINE:ARM64 is inferred from the input files.
           }],
         ],
-        'GenerateDebugInformation': 'true',
+        'GenerateDebugInformation': 'false',
         'SuppressStartupBanner': 'true',
       },
     },
