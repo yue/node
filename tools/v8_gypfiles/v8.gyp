@@ -868,6 +868,15 @@
                 "<(V8_ROOT)/src/trap-handler/handler-outside-posix.cc",
               ],
             }],
+            ['OS=="mac" and v8_target_arch!=host_arch', {
+              'target_conditions': [
+                ['_toolset == "host"', {
+                  'sources': [
+                    "<(V8_ROOT)/src/trap-handler/handler-outside-simulator.cc",
+                  ],
+                }],
+              ],
+            }],
             ['OS=="win"', {
               'sources': [
                 "<(V8_ROOT)/src/diagnostics/unwinding-info-win64.cc",
