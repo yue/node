@@ -1112,37 +1112,25 @@ def ExpandMacros(string, expansions):
     return string
 
 
-def _ExtractImportantEnvironment(output_of_set):
-    """Extracts environment variables required for the toolchain to run from
-    a textual dump output by the cmd.exe 'set' command."""
-    envvars_to_save = (
-        "goma_.*",  # TODO(scottmg): This is ugly, but needed for goma.
-        "include",
-        "lib",
-        "libpath",
-        "path",
-        "pathext",
-        "systemroot",
-        "temp",
-        "tmp",
-    )
+def _ExtractEnvironment(output_of_set):
+    """Extracts environment variables from a textual dump output by the cmd.exe
+    'set' command."""
     env = {}
     # This occasionally happens and leads to misleading SYSTEMROOT error messages
     # if not caught here.
     if output_of_set.count("=") == 0:
         raise Exception("Invalid output_of_set. Value is:\n%s" % output_of_set)
     for line in output_of_set.splitlines():
-        for envvar in envvars_to_save:
-            if re.match(envvar + "=", line.lower()):
-                var, setting = line.split("=", 1)
-                if envvar == "path":
-                    # Our own rules (for running gyp-win-tool) and other actions in
-                    # Chromium rely on python being in the path. Add the path to this
-                    # python here so that if it's not in the path when ninja is run
-                    # later, python will still be found.
-                    setting = os.path.dirname(sys.executable) + os.pathsep + setting
-                env[var.upper()] = setting
-                break
+        if line.count("=") == 0:
+            continue
+        var, setting = line.lower().split("=", 1)
+        if var == "path":
+            # Our own rules (for running gyp-win-tool) and other actions in
+            # Chromium rely on python being in the path. Add the path to this
+            # python here so that if it's not in the path when ninja is run
+            # later, python will still be found.
+            setting = os.path.dirname(sys.executable) + os.pathsep + setting
+        env[var.upper()] = setting
     for required in ("SYSTEMROOT", "TEMP", "TMP"):
         if required not in env:
             raise Exception(
@@ -1208,7 +1196,7 @@ def GenerateEnvironmentFiles(
         variables = popen.communicate()[0].decode("utf-8")
         if popen.returncode != 0:
             raise Exception('"%s" failed with error %d' % (args, popen.returncode))
-        env = _ExtractImportantEnvironment(variables)
+        env = _ExtractEnvironment(variables)
 
         # Inject system includes from gyp files into INCLUDE.
         if system_includes:
