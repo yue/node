@@ -944,6 +944,9 @@ int uv__io_start(uv_loop_t* loop, uv__io_t* w, unsigned int events) {
     loop->nfds++;
   }
 
+  if (uv__get_internal_fields(loop)->flags & UV_LOOP_INTERRUPT_ON_IO_CHANGE)
+    uv__loop_interrupt(loop);
+
   return 0;
 }
 
@@ -993,6 +996,9 @@ void uv__io_stop(uv_loop_t* loop, uv__io_t* w, unsigned int events) {
   }
   else if (uv__queue_empty(&w->watcher_queue))
     uv__queue_insert_tail(&loop->watcher_queue, &w->watcher_queue);
+
+  if (uv__get_internal_fields(loop)->flags & UV_LOOP_INTERRUPT_ON_IO_CHANGE)
+    uv__loop_interrupt(loop);
 }
 
 
@@ -1009,6 +1015,9 @@ void uv__io_close(uv_loop_t* loop, uv__io_t* w) {
 void uv__io_feed(uv_loop_t* loop, uv__io_t* w) {
   if (uv__queue_empty(&w->pending_queue))
     uv__queue_insert_tail(&loop->pending_queue, &w->pending_queue);
+
+  if (uv__get_internal_fields(loop)->flags & UV_LOOP_INTERRUPT_ON_IO_CHANGE)
+    uv__loop_interrupt(loop);
 }
 
 
