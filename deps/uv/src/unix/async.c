@@ -66,7 +66,6 @@ static void uv__kqueue_runtime_detection(void) {
 }
 #endif
 
-static void uv__async_send(uv_loop_t* loop);
 static int uv__async_start(uv_loop_t* loop);
 static void uv__cpu_relax(void);
 
@@ -106,7 +105,7 @@ int uv_async_send(uv_async_t* handle) {
 
   /* Wake up the other thread's event loop. */
   if (atomic_exchange(pending, 1) == 0)
-    uv__async_send(handle->loop);
+    uv__loop_interrupt(handle->loop);
 
   /* Set the loop to not-busy. */
   atomic_fetch_add(busy, -1);
@@ -214,7 +213,7 @@ static void uv__async_io(uv_loop_t* loop, uv__io_t* w, unsigned int events) {
 }
 
 
-static void uv__async_send(uv_loop_t* loop) {
+void uv__loop_interrupt(uv_loop_t* loop) {
   int fd;
   ssize_t r;
 #ifdef __linux__
