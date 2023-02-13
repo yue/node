@@ -169,7 +169,6 @@
         '--jinja_dir', '<(V8_ROOT)/third_party',
         '--output_base', '<(inspector_generated_output_root)/src/inspector',
         '--config', '<(inspector_path)/inspector_protocol_config.json',
-        '--config_value', 'protocol.path=<(v8_inspector_js_protocol)',
         '--inspector_protocol_dir', '<(inspector_protocol_path)',
       ],
       'message': 'Generating inspector protocol sources from protocol json',
