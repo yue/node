@@ -147,7 +147,7 @@ class Realm : public MemoryRetainer {
   void DoneBootstrapping();
 
   Kind kind_;
-  bool has_run_bootstrapping_code_ = false;
+  bool has_run_bootstrapping_code_ = true;
 
   int64_t base_object_count_ = 0;
   int64_t base_object_created_by_bootstrap_ = 0;

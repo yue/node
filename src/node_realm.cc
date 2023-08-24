@@ -176,8 +176,6 @@ MaybeLocal<Value> Realm::ExecuteBootstrapper(const char* id) {
 MaybeLocal<Value> Realm::RunBootstrapping() {
   EscapableHandleScope scope(isolate_);
 
-  CHECK(!has_run_bootstrapping_code());
-
   Local<Value> result;
   if (!ExecuteBootstrapper("internal/bootstrap/realm").ToLocal(&result) ||
       !BootstrapRealm().ToLocal(&result)) {
